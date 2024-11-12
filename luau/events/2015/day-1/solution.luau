@@ -1,5 +1,5 @@
 local fs = require("@lune/fs")
-local input = fs.readFile("events/2015/day-1/input.txt")
+local input = fs.readFile("input.txt")
 
 -- solution code...
 local sum = 0
@@ -15,5 +15,5 @@ for index, character in input:split("") do
 		basementLevel = index
 	end
 end
-fs.writeFile("events/2015/day-1/task-1/output.txt", tostring(sum))
-fs.writeFile("events/2015/day-1/task-2/output.txt", tostring(basementLevel))
+fs.writeFile("output-1.txt", tostring(sum))
+fs.writeFile("output-2.txt", tostring(basementLevel))

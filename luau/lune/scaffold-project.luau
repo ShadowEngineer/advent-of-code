@@ -28,21 +28,11 @@ if not fs.isDir(newPath) then
 end
 
 -- templating new directory
-local scriptName = `script.luau`
 local templateFolder = `template`
 for _, file in fs.readDir(templateFolder) do
 	local fullFileName = `{process.cwd}/{templateFolder}/{file}`
-	if fs.isDir(fullFileName) then
-		local newSubdirectoryPath = `{newPath}/{file}`
-		fs.copy(fullFileName, newSubdirectoryPath, true)
-
-		local solutionFile = `{newSubdirectoryPath}/solution.luau`
-		fs.copy(`{templateFolder}/{scriptName}`, solutionFile)
-		local modifiedContents = fs.readFile(solutionFile):gsub("INPUT_FILE_PATH", `{newPath}/input.txt`)
-		fs.writeFile(solutionFile, modifiedContents)
-
-		fs.writeFile(`{newSubdirectoryPath}/output.txt`, "")
-	end
+	local newFullFileName = `{newPath}/{file}`
+	fs.copy(fullFileName, newFullFileName, true)
 end
 
 -- getting env contents

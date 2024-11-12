@@ -1,5 +1,0 @@
-local fs = require("@lune/fs")
-local input = fs.readFile("INPUT_FILE_PATH")
-
--- solution code...
-print(input)
