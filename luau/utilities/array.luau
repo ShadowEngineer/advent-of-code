@@ -3,19 +3,6 @@
 ]=]
 local Array = {}
 
-type Relational = number | typeof(setmetatable({}, {
-	__le = function() end,
-	__lt = function() end,
-	__eq = function() end,
-	__gt = function() end,
-	__ge = function() end,
-}))
-
-type Arithmetic = number | typeof(setmetatable({}, {
-	__add = function() end,
-	__mul = function() end,
-}))
-
 --[=[
 	Finds the smallest value in the given array.
 	Values should support the `<` operation.
