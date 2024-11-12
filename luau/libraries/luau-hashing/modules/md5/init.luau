@@ -135,6 +135,7 @@ local function md5(message: string): (string, { number })
 
 	local finalMessage = {
 		if leftover ~= 0 then string.sub(message, -leftover) else "",
+		-- selene: allow(bad_string_escape)
 		"\x80",
 		string.rep("\0", (nextMultipleOf64 - leftover - 9) % 64),
 		string.pack("<L", messageLen * 8),
