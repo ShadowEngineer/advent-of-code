@@ -170,6 +170,16 @@ for wire, instruction in wires do
 end
 local signalAtWireA = calculateSignal("a", 0)
 print(signalAtWireA)
-
 fs.writeFile("output-1.txt", tostring(signalAtWireA))
-fs.writeFile("output-2.txt", "solution2")
+
+for wire, instruction in wires do
+	if wire == "b" then
+		instruction.value = signalAtWireA
+	else
+		instruction.value = nil
+	end
+end
+
+signalAtWireA = calculateSignal("a", 0)
+print(signalAtWireA)
+fs.writeFile("output-2.txt", signalAtWireA)
