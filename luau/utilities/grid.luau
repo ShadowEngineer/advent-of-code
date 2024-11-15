@@ -1,3 +1,4 @@
+--!strict
 local vector = require("vector")
 
 type Dimension = vector.Vector2D<number>

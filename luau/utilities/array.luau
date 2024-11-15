@@ -1,3 +1,4 @@
+--!strict
 --[=[
 	Utilities for array operations.
 ]=]
@@ -16,6 +17,25 @@ function Array.min(array: { number }): number
 		local smallest = array[1]
 		for index = 2, #array, 1 do
 			if array[index] < smallest then
+				smallest = array[index]
+			end
+		end
+		return smallest
+	end
+end
+
+--[=[
+	Finds the minimum value in the array based on a reducer function that, for each item returns a number to use in the mininmum calculation.
+]=]
+function Array.minValue<V>(array: { V }, reducer: (V) -> number): V
+	if #array == 0 then
+		error("empty array!")
+	elseif #array == 1 then
+		return array[1]
+	else
+		local smallest = array[1]
+		for index = 2, #array, 1 do
+			if reducer(array[index]) < reducer(smallest) then
 				smallest = array[index]
 			end
 		end
@@ -43,10 +63,30 @@ function Array.max(array: { number }): number
 end
 
 --[=[
+	Finds the maximum value in the array based on a reducer function that, for each item returns a number to use in the maximum calculation.
+]=]
+function Array.maxValue<V>(array: { V }, reducer: (V) -> number): V
+	if #array == 0 then
+		error("empty array!")
+	elseif #array == 1 then
+		return array[1]
+	else
+		local largest = array[1]
+		for index = 2, #array, 1 do
+			if reducer(array[index]) > reducer(largest) then
+				largest = array[index]
+			end
+		end
+		return largest
+	end
+end
+
+--[=[
 	Sums together all elements of a given array.
 	Elements should support the `+` operation.
+	TODO: make generic when type extending becomes a thing, or better support for metatable types also becomes a thing
 ]=]
-function Array.sum<T>(array: { T }): T | number
+function Array.sum(array: { number }): number
 	if #array == 0 then
 		return 0
 	elseif #array == 1 then
@@ -63,8 +103,9 @@ end
 --[=[
 	Multiplies together all the elements of the given array.
 	Elements should support the `*` operation.
+	TODO: make generic when type extending becomes a thing, or better support for metatable types also becomes a thing
 ]=]
-function Array.product<T>(array: { T }): T | number
+function Array.product(array: { number }): number
 	if #array == 0 then
 		return 1
 	elseif #array == 1 then
@@ -76,6 +117,12 @@ function Array.product<T>(array: { T }): T | number
 		end
 		return product
 	end
+end
+
+function Array.append<T>(array: { T }, value: T): { T }
+	local newArray = table.clone(array)
+	table.insert(newArray, value)
+	return newArray
 end
 
 --[=[
@@ -108,6 +155,25 @@ function Array.removeAll<T>(array: { T }, target: T): { T }
 		new[index - offset] = value
 	end
 	return new
+end
+
+--[=[
+	Maps all the values of the array by a given mapper function, optionally remapping the indices.
+]=]
+function Array.map<VOld, VNew>(array: { VOld }, mapValue: (VOld, number) -> (VNew, number?)): { VNew }
+	local newArray = {}
+
+	for index, item in ipairs(array) do
+		local newValue, newIndex = mapValue(item, index)
+		local indexToUse = index
+		if newIndex then
+			indexToUse = newIndex
+		end
+
+		newArray[indexToUse] = newValue
+	end
+
+	return newArray
 end
 
 return Array

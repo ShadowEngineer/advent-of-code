@@ -1,3 +1,4 @@
+--!strict
 local Text = {}
 
 function Text.strip(text: string): string
