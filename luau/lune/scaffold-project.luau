@@ -25,6 +25,9 @@ print("Generating...")
 local newPath = `events/{years[year]}/day-{day}`
 if not fs.isDir(newPath) then
 	fs.writeDir(newPath)
+else
+	print(`{newPath} already exists, will not overwrite!`)
+	return
 end
 
 -- templating new directory
