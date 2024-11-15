@@ -12,6 +12,7 @@ local LOG = false
 
 local totalCodeCharacters = 0
 local totalMemoryCharacters = 0
+local totalEncodedCharacters = 0
 for _, line in input:split("\n") do
 	line = text.strip(line)
 	local codeCharacters = line:len()
@@ -33,8 +34,20 @@ for _, line in input:split("\n") do
 
 	totalCodeCharacters += codeCharacters
 	totalMemoryCharacters += memoryCharacters
+
+	-- part 2, re-encoding
+	local encoded =
+		`##{line:gsub(pattern.hex, "HEXAB"):gsub(pattern.doubleQuote, "QUOT"):gsub(pattern.doubleBackSlash, "BACK")}##`
+	if LOG then
+		print(`LINE: {line}\nENCODED: {encoded}`)
+	end
+
+	totalEncodedCharacters += encoded:len()
 end
 local totalDifference = totalCodeCharacters - totalMemoryCharacters
 print(totalDifference)
 fs.writeFile("output-1.txt", totalDifference)
-fs.writeFile("output-2.txt", "solution2")
+
+local totalEncodedDifference = totalEncodedCharacters - totalCodeCharacters
+print(totalEncodedDifference)
+fs.writeFile("output-2.txt", totalEncodedDifference)
