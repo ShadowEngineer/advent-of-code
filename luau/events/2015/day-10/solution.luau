@@ -2,10 +2,14 @@
 local fs = require("@lune/fs")
 local text = require("../../../utilities/text")
 local array = require("../../../utilities/array")
+local elements = require("elements")
 local input = text.strip(fs.readFile("input.txt"))
 
 type Token = { character: string, quantity: number }
 type Encoding = { Token }
+
+type Element = string
+type ElementEncoding = { Element }
 
 -- solution code...
 local function encode(sequence: string): Encoding
@@ -46,97 +50,25 @@ local function iterateEncoding(encoding: Encoding): Encoding
 	return encode(result)
 end
 
---[=[
-	# steps
-	1. for every entry
-	2. generate a new entry with the CHARACTER set to the QUANTITY of the entry, and QUANTITY set to 1
-	3. place it before the entry, setting the entry's quantity to 1
-	4. iterate through again, and merge together adjacent entries with the same character, summing their quantities
-
-	every time, the list length doubles at first, and then gets reduced by some small amount with the merges
-	# case analysis
-	let's practice encoding the simple case:
-	- 1 encoded is
-	```
-	{{
-		character: "1",
-		quantity: 1
-	}}
-	```
-	- which turns into 11, encoded is:
-	```
-	{{
-		character: "1",
-		quantity: 2
-	}}
-	```
-	- which turns into 21, encoded is:
-	```
-	{
-		{
-			character: "2",
-			quantity: 1
-		},
-		{
-			character: "1",
-			quantity: 1
-		}
-	}
-	```
-	- which turns into 1211, encoded is:
-	```
-	{
-		{
-			character: "1",
-			quantity: 1
-		},
-		{
-			character: "2",
-			quantity: 1
-		},
-		{
-			character: "1",
-			quantity: 2
-		}
-	}
-	```
-]=]
-local function iterateEncodingSmartly(encoding: Encoding): Encoding
-	-- generating new tokens (duoubling array)
-	local newEncoding: Encoding = {}
-	for _, token in encoding do
-		local newToken: Token = {
-			character = tostring(token.quantity),
-			quantity = 1,
-		}
-		local existingToken: Token = {
-			character = token.character,
-			quantity = 1,
-		}
-		table.insert(newEncoding, newToken)
-		table.insert(newEncoding, existingToken)
+local function getElementEncodingLength(encoding: ElementEncoding): number
+	local length = 0
+	for _, element in encoding do
+		length += elements.Elements[element].text:len()
 	end
+	return length
+end
 
-	-- removing duplicates
-	if #newEncoding > 1 then
-		local removed = 0
-		local current = newEncoding[1]
-		for index = 2, #newEncoding - removed, 1 do
-			index = index - removed
-			local token = newEncoding[index]
-			if token == nil then
-				break
-			end
+local function decodeElementFromText(str: string): ElementEncoding
+	return { elements.ByText[str] }
+end
 
-			if token.character == current.character then
-				removed += 1
-				current.quantity += (table.remove(newEncoding, index) :: Token).quantity
-			else
-				current = token
-			end
+local function iterateEncodingSmartly(encoding: ElementEncoding): ElementEncoding
+	local newEncoding: ElementEncoding = {}
+	for _, element in encoding do
+		for _, mappedElement in elements.Elements[element].mapping do
+			table.insert(newEncoding, mappedElement)
 		end
 	end
-
 	return newEncoding
 end
 
@@ -148,7 +80,7 @@ end
 
 print(input)
 
-local SKIP_FIRST_PART = true
+local SKIP_FIRST_PART = false
 local iterations = 40
 local encoding = encode(input)
 local encodingSize = 0
@@ -164,17 +96,13 @@ if not SKIP_FIRST_PART then
 	fs.writeFile("output-1.txt", tostring(encodingSize))
 end
 
-iterations = 1
-encoding = encode("312211322212221121123222112")
-print(encoding)
+iterations = 50
+local elementEncoding = decodeElementFromText(input)
+print(elementEncoding)
 for iteration = 1, iterations, 1 do
-	local startTime = os.clock()
 	print(`Iteration: {iteration}`)
-	encoding = iterateEncodingSmartly(encoding)
-	local difference = os.clock() - startTime
-	print(
-		`took {("%.3f"):format(difference)} seconds. Estimated {("%.3f"):format(difference * 1.303577269)}s for the next iteration`
-	)
+	elementEncoding = iterateEncodingSmartly(elementEncoding)
 end
-encodingSize = getEncodingLength(encoding)
+encodingSize = getElementEncodingLength(elementEncoding)
+print(encodingSize)
 fs.writeFile("output-2.txt", tostring(encodingSize))
