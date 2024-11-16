@@ -119,9 +119,46 @@ function Array.product(array: { number }): number
 	end
 end
 
+--[=[
+	Appends an element to the end of an array.
+]=]
 function Array.append<T>(array: { T }, value: T): { T }
 	local newArray = table.clone(array)
 	table.insert(newArray, value)
+	return newArray
+end
+
+--[=[
+	Removes the last element from the end of the array.
+]=]
+function Array.pop<T>(array: { T }): T
+	return Array.tail(array, 1)[1]
+end
+
+--[=[
+	Extracts the first n elements of the array, clamping the result to the array size.
+]=]
+function Array.head<T>(array: { T }, size: number): { T }
+	size = math.min(size, #array)
+
+	local newArray = {}
+	for index = 1, size do
+		newArray[index] = array[index]
+	end
+	return newArray
+end
+
+--[=[
+	Extracts the last n elements of the array, clamping the result to the array size.
+]=]
+function Array.tail<T>(array: { T }, size: number): { T }
+	size = math.min(size, #array)
+
+	local newArray = {}
+	for index = 1, size do
+		local realIndex = #array - size + index
+		newArray[index] = array[realIndex]
+	end
 	return newArray
 end
 
