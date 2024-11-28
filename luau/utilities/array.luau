@@ -176,4 +176,30 @@ function Array.map<VOld, VNew>(array: { VOld }, mapValue: (VOld, number) -> (VNe
 	return newArray
 end
 
+--[=[
+    Predicates if an array contains a given value.
+]=]
+function Array.contains<T>(array: { T }, filter: T): boolean
+	for _, value in ipairs(array) do
+		if value == filter then
+			return true
+		end
+	end
+	return false
+end
+
+--[=[
+    Predicates if an array contains any of the values in the filter.
+]=]
+function Array.containsAnyOf<T>(array: { T }, filter: { T }): boolean
+	for _, value in ipairs(array) do
+		for _, rule in ipairs(filter) do
+			if value == rule then
+				return true
+			end
+		end
+	end
+	return false
+end
+
 return Array

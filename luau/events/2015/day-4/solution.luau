@@ -3,7 +3,7 @@ local secretKey = fs.readFile("input.txt")
 
 -- solution code...
 secretKey = secretKey:gsub("\n", "")
-local md5Hash = require("../../../libraries/luau-hashing/modules/md5")
+local md5Hash = require("@libraries/luau-hashing/modules/md5")
 local function getHash(counter: number)
 	return md5Hash(`{secretKey}{counter}`)
 end
@@ -17,7 +17,7 @@ while not isSolution(counter, 5) do
 	counter += 1
 end
 print(getHash(counter), counter)
-fs.writeFile("output-1.txt", counter)
+fs.writeFile("output-1.txt", tostring(counter))
 
 -- task 2
 while not isSolution(counter, 6) do
@@ -25,4 +25,4 @@ while not isSolution(counter, 6) do
 end
 
 print(getHash(counter), counter)
-fs.writeFile("output-2.txt", counter)
+fs.writeFile("output-2.txt", tostring(counter))

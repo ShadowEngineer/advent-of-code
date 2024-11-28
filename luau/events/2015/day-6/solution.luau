@@ -1,8 +1,8 @@
 local fs = require("@lune/fs")
 
-local text = require("../../../utilities/text")
-local vector = require("../../../utilities/vector")
-local grid = require("../../../utilities/grid")
+local text = require("@utilities/text")
+local vector = require("@utilities/vector")
+local grid = require("@utilities/grid")
 
 local input = fs.readFile("input.txt")
 
@@ -14,7 +14,8 @@ input = text.strip(input)
 local houseLights = grid.new({ x = 1000, y = 1000 })
 
 for _, line in input:split("\n") do
-	local _, _, command: Command, startX, startY, stopX, stopY = line:find("(.+) (%d+),(%d+) through (%d+),(%d+)")
+	local _, _, commandString, startX, startY, stopX, stopY = line:find("(.+) (%d+),(%d+) through (%d+),(%d+)")
+	local command: Command = commandString :: Command
 	local start: Point = { x = tonumber(startX) :: number + 1, y = tonumber(startY) :: number + 1 }
 	local stop: Point = { x = tonumber(stopX) :: number + 1, y = tonumber(stopY) :: number + 1 }
 
@@ -47,5 +48,5 @@ for x = 1, 1000, 1 do
 	end
 end
 
-fs.writeFile("output-1.txt", numberOfLightsTurnedOn)
-fs.writeFile("output-2.txt", totalBrightness)
+fs.writeFile("output-1.txt", tostring(numberOfLightsTurnedOn))
+fs.writeFile("output-2.txt", tostring(totalBrightness))

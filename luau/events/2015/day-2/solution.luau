@@ -1,5 +1,5 @@
 local fs = require("@lune/fs")
-local array = require("../../../utilities/array.luau")
+local array = require("@utilities/array")
 local input = fs.readFile("input.txt")
 
 -- solution code...
@@ -34,5 +34,5 @@ for _, line in input:split("\n") do
 	totalWrappingPaper += surfaceArea
 end
 
-fs.writeFile("output.txt", tostring(totalWrappingPaper))
-fs.writeFile("output.txt", tostring(totalRibbon))
+fs.writeFile("output-1.txt", tostring(totalWrappingPaper))
+fs.writeFile("output-2.txt", tostring(totalRibbon))

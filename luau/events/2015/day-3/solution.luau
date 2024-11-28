@@ -13,7 +13,7 @@ local function coordToHouse(coordinate: { x: number, y: number }): string
 end
 
 -- building house grid from eggnog-infused elf radio calls
-for index, direction: Input in input:split("") do
+for index, direction: Input in (input:split("") :: any) :: { Input } do
 	local agent = if taskMode == "two" and index % 2 == 0 then roboSanta else santa
 	if direction == "<" then
 		agent.x -= 1
@@ -38,4 +38,4 @@ local totalHousesWithMoreThan1 = 0
 for _ in houses do
 	totalHousesWithMoreThan1 += 1
 end
-fs.writeFile(`output-{if taskMode == "one" then 1 else 2}.txt`, totalHousesWithMoreThan1)
+fs.writeFile(`output-{if taskMode == "one" then 1 else 2}.txt`, tostring(totalHousesWithMoreThan1))

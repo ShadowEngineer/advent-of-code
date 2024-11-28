@@ -1,5 +1,5 @@
 local fs = require("@lune/fs")
-local text = require("../../../utilities/text")
+local text = require("@utilities/text")
 local input = text.strip(fs.readFile("input.txt"))
 
 -- solution code...
@@ -46,8 +46,8 @@ for _, line in input:split("\n") do
 end
 local totalDifference = totalCodeCharacters - totalMemoryCharacters
 print(totalDifference)
-fs.writeFile("output-1.txt", totalDifference)
+fs.writeFile("output-1.txt", tostring(totalDifference))
 
 local totalEncodedDifference = totalEncodedCharacters - totalCodeCharacters
 print(totalEncodedDifference)
-fs.writeFile("output-2.txt", totalEncodedDifference)
+fs.writeFile("output-2.txt", tostring(totalEncodedDifference))
