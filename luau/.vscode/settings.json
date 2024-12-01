@@ -5,5 +5,13 @@
         "@utilities": "./utilities/",
         "@libraries": "./libraries",
         "@frktest": "./lune_packages/.pesde/itsfrank+frktest/0.0.2/frktest/src/"
-    }
+    },
+    "luau-lsp.ignoreGlobs": [
+        "**/_Index/**",
+        "**/lune_packages/**"
+    ],
+    "luau-lsp.completion.imports.ignoreGlobs": [
+        "**/_Index/**",
+        "**/lune_packages/**"
+    ]
 }

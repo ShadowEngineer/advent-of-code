@@ -160,7 +160,7 @@ end
 --[=[
 	Maps all the values of the array by a given mapper function, optionally remapping the indices.
 ]=]
-function Array.map<VOld, VNew>(array: { VOld }, mapValue: (VOld, number) -> (VNew, number?)): { VNew }
+function Array.map<VOld, VNew>(array: { VOld }, mapValue: (value: VOld, index: number) -> (VNew, number?)): { VNew }
 	local newArray = {}
 
 	for index, item in ipairs(array) do
