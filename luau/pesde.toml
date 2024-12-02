@@ -1,0 +1,16 @@
+name = "shadowengineer/advent_of_code"
+version = "0.1.0"
+description = "luau-implementation of advent of code solutions throughout the years"
+authors = ["ShadowEngineer"]
+repository = "https://github.com/ShadowEngineer/advent-of-code"
+license = "MIT"
+private = true
+
+[target]
+environment = "lune"
+
+[indices]
+default = "https://github.com/daimond113/pesde-index"
+
+[dependencies]
+frktest = { name = "itsfrank/frktest", version = "^0.0.2" }

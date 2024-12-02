@@ -27,7 +27,7 @@ end
 --[=[
 	Finds the minimum value in the array based on a reducer function that, for each item returns a number to use in the mininmum calculation.
 ]=]
-function Array.minValue<V>(array: { V }, reducer: (V) -> number): V
+function Array.minValue<V>(array: { V }, reducer: (value: V) -> number): V
 	if #array == 0 then
 		error("empty array!")
 	elseif #array == 1 then
@@ -90,6 +90,7 @@ function Array.sum(array: { number }): number
 	if #array == 0 then
 		return 0
 	elseif #array == 1 then
+		assert(typeof(array[1]) == "number", `array element 1 is not a number`)
 		return array[1]
 	else
 		local sum = 0
@@ -109,6 +110,7 @@ function Array.product(array: { number }): number
 	if #array == 0 then
 		return 1
 	elseif #array == 1 then
+		assert(typeof(array[1]) == "number", `array element 1 is not a number`)
 		return array[1]
 	else
 		local product = 1
@@ -166,6 +168,10 @@ end
 	Removes the value from the array, returning a new array with the remaining values.
 ]=]
 function Array.removeValue<T>(array: { T }, target: T): { T }
+	if #array == 0 then
+		return {}
+	end
+
 	local new = {}
 	local offset = 0
 	for index, value in ipairs(array) do
@@ -182,6 +188,10 @@ end
 	Removes all instances of the value from the array, returning a new array with the remaining values.
 ]=]
 function Array.removeAll<T>(array: { T }, target: T): { T }
+	if #array == 0 then
+		return {}
+	end
+
 	local new = {}
 	local offset = 0
 	for index, value in ipairs(array) do
@@ -197,7 +207,11 @@ end
 --[=[
 	Maps all the values of the array by a given mapper function, optionally remapping the indices.
 ]=]
-function Array.map<VOld, VNew>(array: { VOld }, mapValue: (VOld, number) -> (VNew, number?)): { VNew }
+function Array.map<VOld, VNew>(array: { VOld }, mapValue: (value: VOld, index: number) -> (VNew, number?)): { VNew }
+	if #array == 0 then
+		return {}
+	end
+
 	local newArray = {}
 
 	for index, item in ipairs(array) do
@@ -211,6 +225,58 @@ function Array.map<VOld, VNew>(array: { VOld }, mapValue: (VOld, number) -> (VNe
 	end
 
 	return newArray
+end
+
+--[=[
+    Filters the array for all the values that pass the predicate.
+]=]
+function Array.filter<T>(array: { T }, predicate: (value: T) -> boolean): { T }
+	if #array == 0 then
+		return {}
+	end
+
+	local newArray = {}
+	for _, value in ipairs(array) do
+		if predicate(value) then
+			table.insert(newArray, value)
+		end
+	end
+
+	return newArray
+end
+
+--[=[
+    Predicates if an array contains a given value.
+]=]
+function Array.contains<T>(array: { T }, value: T): boolean
+	if #array == 0 then
+		return false
+	end
+
+	for _, arrayValue in ipairs(array) do
+		if arrayValue == value then
+			return true
+		end
+	end
+
+	return false
+end
+
+--[=[
+    Predicates if an array contains any of the values in the filter.
+]=]
+function Array.containsAnyOf<T>(array: { T }, values: { T }): boolean
+	if #array == 0 or #values == 0 then
+		return false
+	end
+
+	for _, value in ipairs(values) do
+		if Array.contains(array, value) then
+			return true
+		end
+	end
+
+	return false
 end
 
 return Array

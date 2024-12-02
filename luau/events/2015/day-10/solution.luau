@@ -1,7 +1,7 @@
 --!strict
 local fs = require("@lune/fs")
-local text = require("../../../utilities/text")
-local array = require("../../../utilities/array")
+local text = require("@utilities/text")
+local array = require("@utilities/array")
 local elements = require("elements")
 local input = text.strip(fs.readFile("input.txt"))
 

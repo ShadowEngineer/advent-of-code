@@ -1,9 +1,9 @@
 --!strict
 local fs = require("@lune/fs")
-local text = require("../../../utilities/text")
-local graph = require("../../../utilities/graph")
-local array = require("../../../utilities/array")
-local dictionary = require("../../../utilities/dictionary")
+local text = require("@utilities/text")
+local graph = require("@utilities/graph")
+local array = require("@utilities/array")
+local dictionary = require("@utilities/dictionary")
 local input = text.strip(fs.readFile("input.txt"))
 
 type City = string

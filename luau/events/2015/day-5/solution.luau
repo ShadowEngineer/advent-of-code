@@ -2,8 +2,8 @@ local fs = require("@lune/fs")
 local input = fs.readFile("input.txt")
 
 -- solution code...
-local text = require("../../../utilities/text")
-local dictionary = require("../../../utilities/dictionary")
+local text = require("@utilities/text")
+local dictionary = require("@utilities/dictionary")
 local vowels = { "a", "e", "i", "o", "u" }
 local invalidStrings = { "ab", "cd", "pq", "xy" }
 local function isNice(line: string): boolean
@@ -44,7 +44,7 @@ for _, line in text.strip(input):split("\n") do
 end
 
 print(numberOfNiceStrings)
-fs.writeFile("output-1.txt", numberOfNiceStrings)
+fs.writeFile("output-1.txt", tostring(numberOfNiceStrings))
 
 local function isNice2(line: string): boolean
 	-- pair check
@@ -91,4 +91,4 @@ for _, line in text.strip(input):split("\n") do
 	end
 end
 print(numberOfMoreNiceStrings)
-fs.writeFile("output-2.txt", numberOfMoreNiceStrings)
+fs.writeFile("output-2.txt", tostring(numberOfMoreNiceStrings))

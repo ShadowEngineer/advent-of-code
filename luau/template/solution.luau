@@ -1,6 +1,6 @@
 --!strict
 local fs = require("@lune/fs")
-local text = require("../../../utilities/text")
+local text = require("@utilities/text")
 local input = text.strip(fs.readFile("input.txt"))
 
 -- solution code...

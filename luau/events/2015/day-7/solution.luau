@@ -1,32 +1,39 @@
 local fs = require("@lune/fs")
 local stdio = require("@lune/stdio")
-local text = require("../../../utilities/text")
+local text = require("@utilities/text")
 local input = text.strip(fs.readFile("input.txt"))
 
 type Wire = string
 type WireOrSignal = Wire | number
 type InstructionBase = { line: string, value: number? }
+type SignalKind = "signal"
+type GateKind = "gate"
+type ShiftKind = "shift"
+type NotKind = "not"
+type GateOperationName = "AND" | "OR"
+type ShiftOperationName = "RSHIFT" | "LSHIFT"
+type NotOperationName = "NOT"
 type SignalToWire = InstructionBase & {
-	kind: "signal",
+	kind: SignalKind,
 	wire: Wire,
 	signal: WireOrSignal,
 }
 type GateOperation = InstructionBase & {
-	kind: "gate",
+	kind: GateKind,
 	wire: Wire,
-	operation: "AND" | "OR",
+	operation: GateOperationName,
 	argument: { left: WireOrSignal, right: WireOrSignal },
 }
 type ShiftOperation = InstructionBase & {
-	kind: "shift",
+	kind: ShiftKind,
 	wire: Wire,
-	operation: "RSHIFT" | "LSHIFT",
+	operation: ShiftOperationName,
 	argument: { left: Wire, right: number },
 }
 type NotOperation = InstructionBase & {
-	kind: "not",
+	kind: NotKind,
 	wire: Wire,
-	operation: "NOT",
+	operation: NotOperationName,
 	argument: Wire,
 }
 type Instruction = SignalToWire | GateOperation | ShiftOperation | NotOperation
@@ -44,9 +51,9 @@ local function decodeInstruction(line: string): Instruction
 	if matches[3] ~= nil then
 		local signalInstruction: SignalToWire = {
 			line = line,
-			kind = "signal",
-			signal = if tonumber(matches[3]) then tonumber(matches[3]) else matches[3],
-			wire = matches[4],
+			kind = "signal" :: SignalKind, -- this is stupid, why is luau like this
+			signal = if tonumber(matches[3]) then tonumber(matches[3]) :: number else matches[3] :: Wire,
+			wire = matches[4] :: Wire,
 		}
 		return signalInstruction
 	end
@@ -55,10 +62,10 @@ local function decodeInstruction(line: string): Instruction
 	if matches[3] ~= nil then
 		local shiftInstruction: ShiftOperation = {
 			line = line,
-			kind = "shift",
-			wire = matches[6],
-			operation = matches[4],
-			argument = { left = matches[3], right = tonumber(matches[5]) },
+			kind = "shift" :: ShiftKind,
+			wire = matches[6] :: Wire,
+			operation = matches[4] :: ShiftOperationName,
+			argument = { left = matches[3] :: Wire, right = tonumber(matches[5]) :: number },
 		}
 		return shiftInstruction
 	end
@@ -67,10 +74,10 @@ local function decodeInstruction(line: string): Instruction
 	if matches[3] ~= nil then
 		local notInstruction: NotOperation = {
 			line = line,
-			kind = "not",
-			wire = matches[5],
-			operation = matches[3],
-			argument = matches[4],
+			kind = "not" :: NotKind,
+			wire = matches[5] :: Wire,
+			operation = matches[3] :: NotOperationName,
+			argument = matches[4] :: Wire,
 		}
 		return notInstruction
 	end
@@ -78,12 +85,12 @@ local function decodeInstruction(line: string): Instruction
 	matches = table.pack(line:find(regex.gate))
 	local gateInstruction: GateOperation = {
 		line = line,
-		kind = "gate",
-		wire = matches[6],
-		operation = matches[4],
+		kind = "gate" :: GateKind,
+		wire = matches[6] :: Wire,
+		operation = matches[4] :: GateOperationName,
 		argument = {
-			left = if tonumber(matches[3]) then tonumber(matches[3]) else matches[3],
-			right = if tonumber(matches[5]) then tonumber(matches[5]) else matches[5],
+			left = if tonumber(matches[3]) then tonumber(matches[3]) :: number else matches[3] :: Wire,
+			right = if tonumber(matches[5]) then tonumber(matches[5]) :: number else matches[5] :: Wire,
 		},
 	}
 	return gateInstruction
@@ -152,7 +159,7 @@ local function calculateSignal(wire: Wire, level: number): number
 
 	-- caching
 	if instruction.value == nil then
-		instruction.value = valueToReturn
+		(instruction :: InstructionBase).value = valueToReturn
 	end
 
 	return valueToReturn
@@ -174,12 +181,12 @@ fs.writeFile("output-1.txt", tostring(signalAtWireA))
 
 for wire, instruction in wires do
 	if wire == "b" then
-		instruction.value = signalAtWireA
+		(instruction :: InstructionBase).value = signalAtWireA
 	else
-		instruction.value = nil
+		(instruction :: InstructionBase).value = nil
 	end
 end
 
 signalAtWireA = calculateSignal("a", 0)
 print(signalAtWireA)
-fs.writeFile("output-2.txt", signalAtWireA)
+fs.writeFile("output-2.txt", tostring(signalAtWireA))

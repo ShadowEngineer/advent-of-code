@@ -1,0 +1,11 @@
+{
+    "languageMode": "strict",
+    "lint": {
+        "*": true
+    },
+    "aliases": {
+        "utilities": "./utilities/",
+        "libraries": "./libraries",
+        "frktest": "lune_packages/.pesde/itsfrank+frktest/0.0.2/frktest/src/"
+    }
+}
