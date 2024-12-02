@@ -96,4 +96,12 @@ Operation.Map.toItself = function<T>(value: T): T
 	return value
 end
 
+Operation.Map.toNumber = function<T>(value: T): number?
+	return tonumber(value)
+end
+
+Operation.Map.toString = function<T>(value: T): string
+	return tostring(value)
+end
+
 return Operation

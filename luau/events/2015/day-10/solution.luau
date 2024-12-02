@@ -33,7 +33,7 @@ local function encode(sequence: string): Encoding
 	return encoding
 end
 
-local function decode(encoding: Encoding): string
+local function _decode(encoding: Encoding): string
 	local result = ""
 	for _, token in encoding do
 		result ..= token.character:rep(token.quantity)
