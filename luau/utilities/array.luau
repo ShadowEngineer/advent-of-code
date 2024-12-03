@@ -122,6 +122,21 @@ function Array.product(array: { number }): number
 end
 
 --[=[
+	Multiplies together all the elements of the given arrays, element-wise.
+]=]
+function Array.crossProduct(array1: { number }, array2: { number }): { number }
+	if #array1 ~= #array2 then
+		error(`array size mismatch: {#array1} != {#array2}`)
+	else
+		local new = {}
+		for index in array1 do
+			new[index] = array1[index] * array2[index]
+		end
+		return new
+	end
+end
+
+--[=[
 	Appends an element to the end of an array.
 ]=]
 function Array.append<T>(array: { T }, value: T): { T }
