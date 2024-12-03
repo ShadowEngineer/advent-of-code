@@ -165,6 +165,24 @@ function Array.tail<T>(array: { T }, size: number): { T }
 end
 
 --[=[
+	Remove the value at the current index.
+]=]
+function Array.removeIndex<T>(array: { T }, targetIndex: number): { T }
+	if #array == 0 then
+		return {}
+	end
+
+	local new = {}
+	for index, value in ipairs(array) do
+		if index == targetIndex then
+			continue
+		end
+		table.insert(new, value)
+	end
+	return new
+end
+
+--[=[
 	Removes the value from the array, returning a new array with the remaining values.
 ]=]
 function Array.removeValue<T>(array: { T }, target: T): { T }
@@ -230,14 +248,14 @@ end
 --[=[
     Filters the array for all the values that pass the predicate.
 ]=]
-function Array.filter<T>(array: { T }, predicate: (value: T) -> boolean): { T }
+function Array.filter<T>(array: { T }, predicate: (value: T, index: number) -> boolean): { T }
 	if #array == 0 then
 		return {}
 	end
 
 	local newArray = {}
-	for _, value in ipairs(array) do
-		if predicate(value) then
+	for index, value in ipairs(array) do
+		if predicate(value, index) then
 			table.insert(newArray, value)
 		end
 	end

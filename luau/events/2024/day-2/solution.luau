@@ -31,25 +31,29 @@ local function isSafe(reading: Reading): boolean
 	return true
 end
 
-local function isSafeWithProblemDampener(reading: Reading): boolean
+local function isSafeWithProblemDampener(reading: Reading): (boolean, { number })
 	if isSafe(reading) then
-		return true
+		return true, {}
 	end
 
-	local toleratedResults = array.map(reading, function(value)
-		return isSafe(array.removeValue(reading, value))
+	local toleratedResults = array.map(reading, function(_value, index)
+		return isSafe(array.removeIndex(reading, index))
 	end)
 	local toleratedSafe = array.contains(toleratedResults, true)
-	return toleratedSafe
+	local badResults = array.filter(reading, function(_value, index)
+		return toleratedResults[index]
+	end)
+	return toleratedSafe, badResults
 end
 
 local safeReadings = array.map(input:split("\n"), function(report)
 	local reading = array.map(report:split(" "), operations.Map.toNumber) :: Reading
+	local dampenedSafe, badValues = isSafeWithProblemDampener(reading)
 	return {
 		report = report,
-		reading = reading,
 		safe = isSafe(reading),
-		dampenedSafe = isSafeWithProblemDampener(reading),
+		dampenedSafe = dampenedSafe,
+		badValues = badValues,
 	}
 end)
 

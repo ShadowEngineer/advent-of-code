@@ -149,6 +149,34 @@ return function()
 		end)
 	end)
 
+	test.suite("array.removeIndex", function()
+		local data = { 1, 2, 3 }
+
+		test.case("works", function()
+			check.array.equal(array.removeIndex(data, 2), { 1, 3 })
+		end)
+
+		test.case("is immutable", function()
+			local result = array.removeIndex(data, 2)
+			check.falsy(result == data) -- reference-equality
+		end)
+
+		test.case("returns the same values when the index is not in the array", function()
+			local result = array.removeIndex(data, 4)
+
+			check.array.equal(result, data) -- value-equality
+			check.falsy(result == data) -- reference-equality
+		end)
+
+		test.case("returns an empty array when the original array is empty", function()
+			local emptyArray = {}
+			local result = array.removeIndex(emptyArray, 1)
+
+			check.array.equal(result, emptyArray) -- value-equality
+			check.falsy(result == emptyArray) -- reference-equality
+		end)
+	end)
+
 	test.suite("array.removeValue", function()
 		local data = { 1, 2, 3 }
 
