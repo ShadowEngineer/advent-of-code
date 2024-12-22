@@ -33,4 +33,12 @@ function Text.countAnyCharactersOf(text: string, characters: { string }): { [str
 	return counter
 end
 
+function Text.join(components: { string }): string
+	local result = ""
+	for _, component in components do
+		result ..= component
+	end
+	return result
+end
+
 return Text
